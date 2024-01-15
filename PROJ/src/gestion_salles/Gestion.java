@@ -2,6 +2,7 @@ package gestion_salles;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import ConnexionBd.Requetes_sql;
 
@@ -41,16 +42,20 @@ public class Gestion {
     }
     
     public static void afficherInfosSalle(String numero) {
-        for (Salle salle : salles) {
-            if (salle.getNumeroSalle().equals(numero)) {
+        Requetes_sql requete = new Requetes_sql();
+        try {
+            Salle salle = requete.getInfosSalle(numero);
+            if (salle != null) {
                 System.out.println("Informations de la salle :");
                 System.out.println("Numéro de la salle: " + salle.getNumeroSalle());
                 System.out.println("Nom du bâtiment: " + salle.getBatiment().getNom());
                 System.out.println("Numéro de l'étage: " + salle.getEtage().getNumeroEtage());
-                return;
+            } else {
+                System.out.println("Salle non trouvée.");
             }
+        } catch (SQLException e) {
+        System.out.println("Erreur lors de la récupération des informations de la salle : " + e.getMessage());
         }
-        System.out.println("Salle non trouvée.");
     }
     
     public static void modifierSalle() {
@@ -100,18 +105,23 @@ public class Gestion {
     }
     
     public static void afficherToutesLesSalles() {
-        if (salles.isEmpty()) {
-            System.out.println("Aucune salle n'est enregistrée.");
-        } else {
-            System.out.println("Liste de toutes les salles :");
-            for (Salle salle : salles) {
-                System.out.println("Numéro de la salle: " + salle.getNumeroSalle());
-                System.out.println("Nom du bâtiment: " + salle.getBatiment().getNom());
-                System.out.println("Numéro de l'étage: " + salle.getEtage().getNumeroEtage());
-                System.out.println("--------------------------------");
+        Requetes_sql requete = new Requetes_sql();
+        try {
+            List<Salle> salles = requete.getToutesLesSalles();
+            if (salles.isEmpty()) {
+                System.out.println("Aucune salle n'est enregistrée.");
+            } else {
+                System.out.println("Liste de toutes les salles :");
+                for (Salle salle : salles) {
+                    System.out.println("Numéro de la salle: " + salle.getNumeroSalle());
+                    System.out.println("Nom du bâtiment: " + salle.getBatiment().getNom());
+                    System.out.println("Numéro de l'étage: " + salle.getEtage().getNumeroEtage());
+                    System.out.println("--------------------------------");
+                }
             }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération des salles : " + e.getMessage());
         }
-        return;
     }
 
 }

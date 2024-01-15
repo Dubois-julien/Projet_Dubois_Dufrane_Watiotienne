@@ -19,7 +19,7 @@ public class Main {
             System.out.println("5. Quitter");
 
             int choix = scanner.nextInt();
-            scanner.nextLine(); // Nettoyer le buffer
+            scanner.nextLine(); 
 
             switch (choix) {
             	case 1:
