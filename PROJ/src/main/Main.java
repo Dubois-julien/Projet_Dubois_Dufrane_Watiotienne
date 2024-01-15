@@ -7,7 +7,8 @@ public class Main {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        boolean quitter = false;
+        Gestion.initialiserBaseDeDonnees();
+    	boolean quitter = false;
 
         while (!quitter) {
             System.out.println("Choisissez une option :");

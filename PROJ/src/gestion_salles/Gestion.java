@@ -1,12 +1,23 @@
 package gestion_salles;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import ConnexionBd.Requetes_sql;
 
 public class Gestion {
     private static Scanner scanner = new Scanner(System.in);
     private static ArrayList<Salle> salles = new ArrayList<>();
-
+    
+    public static void initialiserBaseDeDonnees() {
+        Requetes_sql requete = new Requetes_sql();
+        try {
+            requete.creerTableSalles();
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la création de la table 'salles' : " + e.getMessage());
+        }
+    }
+    
     public static void ajouterSalle() {
         System.out.println("Ajouter une nouvelle salle :");
         System.out.print("Entrez le numéro de la salle : ");
@@ -15,14 +26,18 @@ public class Gestion {
         String nomBatiment = scanner.nextLine();
         System.out.print("Entrez le numéro de l'étage : ");
         int numeroEtage = scanner.nextInt();
-        scanner.nextLine(); // Nettoyer le buffer
+        scanner.nextLine(); 
 
         Batiment batiment = new Batiment(nomBatiment);
         Etage etage = new Etage(numeroEtage);
         Salle salle = new Salle(numeroSalle, batiment, etage);
-
-        salles.add(salle);
-        System.out.println("Salle ajoutée avec succès !");
+        Requetes_sql requete = new Requetes_sql();
+        try {
+            requete.ajouterSalle(salle);
+            System.out.println("Salle ajoutée avec succès dans la base de données !");
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de l'ajout de la salle dans la base de données : " + e.getMessage());
+        }
     }
     
     public static void afficherInfosSalle(String numero) {
@@ -58,7 +73,7 @@ public class Gestion {
 
                 System.out.print("Nouveau numéro d'étage (entrez un nombre négatif pour ne pas modifier) : ");
                 int nouveauNumeroEtage = scanner.nextInt();
-                scanner.nextLine(); // Nettoyer le buffer
+                scanner.nextLine(); 
                 if (nouveauNumeroEtage >= 0) {
                     salle.getEtage().setNumeroEtage(nouveauNumeroEtage);
                 }
