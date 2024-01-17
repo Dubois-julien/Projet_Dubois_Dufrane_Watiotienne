@@ -227,21 +227,25 @@ public class Gestion {
         
         System.out.print("Entrez l'heure de fin (format HH:mm) : ");
         String heureFin = scanner.nextLine();
-
-        Requetes_sql requete = new Requetes_sql();
-        try {
-            List<String> creneauxLibres = requete.getCreneauxLibres(date, heureDebut, heureFin);
-            if (creneauxLibres.isEmpty()) {
-                System.out.println("Aucun créneau n'est disponible sur la plage horaire spécifiée.");
-            } else {
-                System.out.println("Créneaux libres :");
-                for (String creneau : creneauxLibres) {
-                    System.out.println(creneau);
+        
+        if (outils.isValidDate(date) && outils.isValidTime(heureDebut) && outils.isValidTime(heureFin)) {
+            Requetes_sql requete = new Requetes_sql();
+            try {
+                List<String> creneauxLibres = requete.getCreneauxLibres(date, heureDebut, heureFin);
+                if (creneauxLibres.isEmpty()) {
+                    System.out.println("Aucun créneau n'est disponible sur la plage horaire spécifiée.");
+                } else {
+                    System.out.println("Créneaux libres :");
+                    for (String creneau : creneauxLibres) {
+                        System.out.println(creneau);
+                    }
                 }
-            }
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération des créneaux libres : " + e.getMessage());
-        } 
+            } catch (SQLException e) {
+                System.out.println("Erreur lors de la récupération des créneaux libres : " + e.getMessage());
+            } 
+        } else {
+            System.out.println("Formats de date ou d'heure invalides. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
+        }
     }
     
     public static void afficherInfosReservation() {
@@ -250,21 +254,25 @@ public class Gestion {
 
         System.out.print("Entrez l'heure de la réservation (format HH:mm) : ");
         String heure = scanner.nextLine();
-
-        Requetes_sql requete = new Requetes_sql();
-        try {
-            Reservation reservation = requete.getReservation(date, heure);
-            if (reservation != null) {
-                System.out.println("Détails de la réservation :");
-                System.out.println("ID Réservation: " + reservation.getIdReservation());
-                System.out.println("Salle: " + reservation.getNumeroSalle() + " - Bâtiment: " + reservation.getNomBatiment());
-                System.out.println("Date: " + reservation.getDateReservation() + " - Heure: " + reservation.getHeure());
-                System.out.println("Promo: " + reservation.getPromo() + " - Responsable: " + reservation.getResponsable());
-            } else {
-                System.out.println("Aucune réservation trouvée pour cette date et heure.");
+        
+        if (outils.isValidDate(date) && outils.isValidTime(heure)) {
+        	Requetes_sql requete = new Requetes_sql();
+            try {
+                Reservation reservation = requete.getReservation(date, heure);
+                if (reservation != null) {
+                    System.out.println("Détails de la réservation :");
+                    System.out.println("ID Réservation: " + reservation.getIdReservation());
+                    System.out.println("Salle: " + reservation.getNumeroSalle() + " - Bâtiment: " + reservation.getNomBatiment());
+                    System.out.println("Date: " + reservation.getDateReservation() + " - Heure: " + reservation.getHeure());
+                    System.out.println("Promo: " + reservation.getPromo() + " - Responsable: " + reservation.getResponsable());
+                } else {
+                    System.out.println("Aucune réservation trouvée pour cette date et heure.");
+                }
+            } catch (SQLException e) {
+                System.out.println("Erreur lors de la récupération des informations de réservation : " + e.getMessage());
             }
-        } catch (SQLException e) {
-            System.out.println("Erreur lors de la récupération des informations de réservation : " + e.getMessage());
+        }else {
+            System.out.println("Formats de date ou d'heure invalides. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
         }
     }
     
