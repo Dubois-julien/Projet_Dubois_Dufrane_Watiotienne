@@ -85,5 +85,14 @@ public class Requetes_sql {
         }
     }
 
+    public void supprimerSalle(String numeroSalle, String nomBatiment) throws SQLException {
+        String query = "DELETE FROM salles WHERE numeroSalle = ? AND nomBatiment = ?";
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, numeroSalle);
+            pstmt.setString(2, nomBatiment);
+            pstmt.executeUpdate();
+        }
+    }
 
 }

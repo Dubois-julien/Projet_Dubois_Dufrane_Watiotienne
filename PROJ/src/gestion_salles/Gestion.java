@@ -1,14 +1,12 @@
 package gestion_salles;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import ConnexionBd.Requetes_sql;
 
 public class Gestion {
     private static Scanner scanner = new Scanner(System.in);
-    private static ArrayList<Salle> salles = new ArrayList<>();
     
     public static void initialiserBaseDeDonnees() {
         Requetes_sql requete = new Requetes_sql();
@@ -95,18 +93,31 @@ public class Gestion {
     public static void supprimerSalle() {
         System.out.print("Entrez le numéro de la salle à supprimer : ");
         String numero = scanner.nextLine();
-        System.out.print("Entrez le batiment de la salle à supprimer : ");
+        System.out.print("Entrez le nom du bâtiment de la salle : ");
         String nomBatiment = scanner.nextLine();
-        for (int i = 0; i < salles.size(); i++) {
-            if (salles.get(i).getNumeroSalle().equals(numero) && salles.get(i).getBatiment().getNom().equals(nomBatiment)) {
-            	afficherInfosSalle(numero,nomBatiment);
-            	salles.remove(i);
-                System.out.println("Salle supprimée avec succès !");
-                return;
+        Requetes_sql requete = new Requetes_sql();
+
+        try {
+            Salle salle = requete.getInfosSalle(numero, nomBatiment);
+            if (salle != null) {
+                afficherInfosSalle(numero, nomBatiment);
+                System.out.print("Êtes-vous sûr de vouloir supprimer cette salle ? (O/N) : ");
+                String confirmation = scanner.nextLine().trim().toUpperCase();
+
+                if (confirmation.equals("O")) {
+                    requete.supprimerSalle(numero, nomBatiment);
+                    System.out.println("Salle supprimée avec succès !");
+                } else {
+                    System.out.println("Suppression annulée.");
+                }
+            } else {
+                System.out.println("Salle non trouvée.");
             }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la suppression de la salle : " + e.getMessage());
         }
-        System.out.println("Salle non trouvée.");
     }
+
     
     public static void afficherToutesLesSalles() {
         Requetes_sql requete = new Requetes_sql();
