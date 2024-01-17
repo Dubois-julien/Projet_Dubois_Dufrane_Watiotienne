@@ -12,8 +12,9 @@ public class Gestion {
         Requetes_sql requete = new Requetes_sql();
         try {
             requete.creerTableSalles();
+            requete.creerTableReservations();
         } catch (SQLException e) {
-            System.out.println("Erreur lors de la création de la table 'salles' : " + e.getMessage());
+            System.out.println("Erreur lors de la création des tables : " + e.getMessage());
         }
     }
     

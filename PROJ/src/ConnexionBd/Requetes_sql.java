@@ -94,5 +94,22 @@ public class Requetes_sql {
             pstmt.executeUpdate();
         }
     }
+    
+    public void creerTableReservations() throws SQLException {
+        String query = "CREATE TABLE IF NOT EXISTS reservations (" +
+                       "id_reservation INT AUTO_INCREMENT PRIMARY KEY," +
+                       "id_salle INT," + 
+                       "date DATE," + 
+                       "heure TIME," + 
+                       "promo VARCHAR(50)," + 
+                       "responsable VARCHAR(100)," + 
+                       "FOREIGN KEY (id_salle) REFERENCES salles(id_salle))"; 
+        try (Connection conn = ConnectBd.getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(query);
+            System.out.println("La table 'reservations' a été créée ou existe déjà.");
+        }
+    }
+
 
 }
