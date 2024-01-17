@@ -241,8 +241,31 @@ public class Gestion {
             }
         } catch (SQLException e) {
             System.out.println("Erreur lors de la récupération des créneaux libres : " + e.getMessage());
+        } 
+    }
+    
+    public static void afficherInfosReservation() {
+        System.out.print("Entrez la date de la réservation (format yyyy-MM-dd) : ");
+        String date = scanner.nextLine();
+
+        System.out.print("Entrez l'heure de la réservation (format HH:mm) : ");
+        String heure = scanner.nextLine();
+
+        Requetes_sql requete = new Requetes_sql();
+        try {
+            Reservation reservation = requete.getReservation(date, heure);
+            if (reservation != null) {
+                System.out.println("Détails de la réservation :");
+                System.out.println("ID Réservation: " + reservation.getIdReservation());
+                System.out.println("Salle: " + reservation.getNumeroSalle() + " - Bâtiment: " + reservation.getNomBatiment());
+                System.out.println("Date: " + reservation.getDateReservation() + " - Heure: " + reservation.getHeure());
+                System.out.println("Promo: " + reservation.getPromo() + " - Responsable: " + reservation.getResponsable());
+            } else {
+                System.out.println("Aucune réservation trouvée pour cette date et heure.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération des informations de réservation : " + e.getMessage());
         }
     }
-
-
+    
 }

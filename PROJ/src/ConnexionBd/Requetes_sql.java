@@ -243,4 +243,30 @@ public class Requetes_sql {
     }
 
 
+    public Reservation getReservation(String date, String heure) throws SQLException {
+        String query = "SELECT r.id_reservation, r.id_salle, r.date, r.heure, r.promo, r.responsable, s.numeroSalle, s.nomBatiment " +
+                       "FROM reservations r " +
+                       "JOIN salles s ON r.id_salle = s.id_salle " +
+                       "WHERE r.date = ? AND r.heure = ?";
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, date);
+            pstmt.setString(2, heure);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Reservation(
+                        rs.getInt("id_reservation"), 
+                        rs.getString("numeroSalle"),
+                        rs.getString("nomBatiment"),
+                        rs.getString("date"), 
+                        rs.getString("heure"),
+                        rs.getString("promo"),
+                        rs.getString("responsable")
+                    );
+                }
+            }
+        }
+        return null; 
+    }
+
 }
