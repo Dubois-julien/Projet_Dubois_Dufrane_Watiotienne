@@ -184,4 +184,38 @@ public class Gestion {
         }
     }
 
+    public static void afficherReservations() {
+        System.out.print("Entrez une date (format yyyy-MM-dd) : ");
+        String date = scanner.nextLine();
+        
+        System.out.print("Entrez l'heure de début (format HH:mm) : ");
+        String heureDebut = scanner.nextLine();
+        
+        System.out.print("Entrez l'heure de fin (format HH:mm) : ");
+        String heureFin = scanner.nextLine();
+
+        if (outils.isValidDate(date) && outils.isValidTime(heureDebut) && outils.isValidTime(heureFin)) {
+            Requetes_sql requete = new Requetes_sql();
+            try {
+                List<Reservation> reservations = requete.getReservations(date, heureDebut, heureFin);
+                if (reservations.isEmpty()) {
+                    System.out.println("Aucune réservation trouvée pour la plage horaire spécifiée.");
+                } else {
+                    for (Reservation reservation : reservations) {
+                        System.out.println("Réservation: " + reservation.getIdReservation() + 
+                                           " - Salle: " + reservation.getIdSalle() + 
+                                           " - Heure: " + reservation.getHeure() + 
+                                           " - Promo: " + reservation.getPromo() + 
+                                           " - Responsable: " + reservation.getResponsable());
+                    }
+                }
+            } catch (SQLException e) {
+                System.out.println("Erreur lors de la récupération des réservations : " + e.getMessage());
+            }
+        } else {
+            System.out.println("Formats de date ou d'heure invalides. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
+        }
+    }
+
+
 }

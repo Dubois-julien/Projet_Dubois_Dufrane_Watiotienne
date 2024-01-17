@@ -180,5 +180,31 @@ public class Requetes_sql {
         }
         return true; 
     }
+    
+    public List<Reservation> getReservations(String date, String heureDebut, String heureFin) throws SQLException {
+        List<Reservation> reservations = new ArrayList<>();
+        String query = "SELECT * FROM reservations WHERE date = ? AND heure BETWEEN ? AND ?";
+
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, date);
+            pstmt.setString(2, heureDebut);
+            pstmt.setString(3, heureFin);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Reservation reservation = new Reservation(
+                        rs.getInt("id_reservation"), 
+                        rs.getInt("id_salle"), 
+                        rs.getString("date"), 
+                        rs.getString("heure"),
+                        rs.getString("promo"),
+                        rs.getString("responsable")
+                    );
+                    reservations.add(reservation);
+                }
+            }
+        }
+        return reservations;
+    }
 
 }
