@@ -147,6 +147,12 @@ public class Requetes_sql {
 
     public boolean SalleDisponible(int idSalle, String date, String heure) throws SQLException {
         LocalTime heureDemandee = LocalTime.parse(heure);
+        
+        if (heureDemandee.getMinute() != 0 && heureDemandee.getMinute() != 30) {
+            System.out.println("Les réservations ne peuvent se faire que par tranche de 30 minutes (HH:00 ou HH:30).");
+            return false;
+        }
+        
         LocalTime heureAvant = heureDemandee.minusMinutes(30);
         LocalTime heureApres = heureDemandee.plusMinutes(30);
         LocalTime heureDebut = LocalTime.of(8, 0);
@@ -166,12 +172,13 @@ public class Requetes_sql {
             pstmt.setString(3, heureAvant.toString());
             pstmt.setString(4, heureApres.toString());
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) == 0;  
+                if (rs.next() && rs.getInt(1) > 0) {
+                    System.out.println("La salle n'est pas disponible à l'heure indiquée, veuillez vérifier les créneaux disponibles.");
+                    return false;
                 }
             }
         }
-        return false;
+        return true; 
     }
 
 }

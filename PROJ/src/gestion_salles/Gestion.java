@@ -158,7 +158,7 @@ public class Gestion {
                 System.out.print("Entrez la date de la réservation (au format yyyy-MM-dd) : ");
                 String date = scanner.nextLine();
 
-                System.out.print("Entrez l'heure de la réservation (au format HH:mm) : ");
+                System.out.print("Entrez l'heure de la réservation (au format HH:00 ou HH:30) : ");
                 String heure = scanner.nextLine();
 
                 System.out.print("Entrez la promo : ");
@@ -171,9 +171,8 @@ public class Gestion {
                     if (requete.SalleDisponible(idSalle, date, heure)) {
                         requete.faireReservation(idSalle, date, heure, promo, responsable);
                         System.out.println("Réservation ajoutée avec succès dans la base de données !");
-                    } else {
-                        System.out.println("La salle n'est pas disponible à l'heure indiquée, veuillez vérifier les créneaux disponibles.");
                     }
+                    
                 } else {
                     System.out.println("Format de date ou d'heure invalide. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
                 }
