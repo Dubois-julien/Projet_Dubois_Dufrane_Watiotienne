@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 import ConnexionBd.Requetes_sql;
+import outils.outils;
 
 public class Gestion {
     private static Scanner scanner = new Scanner(System.in);
@@ -137,6 +138,47 @@ public class Gestion {
             }
         } catch (SQLException e) {
             System.out.println("Erreur lors de la récupération des salles : " + e.getMessage());
+        }
+    }
+
+    public static void faireReservation() {
+        System.out.println("Ajouter une nouvelle réservation :");
+
+        System.out.print("Entrez le numéro de la salle : ");
+        String numeroSalle = scanner.nextLine();
+        System.out.print("Entrez le nom du bâtiment : ");
+        String nomBatiment = scanner.nextLine();
+
+        Requetes_sql requete = new Requetes_sql();
+
+        try {
+            int idSalle = requete.getIdSalle(numeroSalle, nomBatiment);
+
+            if (idSalle != -1) {
+                System.out.print("Entrez la date de la réservation (au format yyyy-MM-dd) : ");
+                String date = scanner.nextLine();
+
+                System.out.print("Entrez l'heure de la réservation (au format HH:mm) : ");
+                String heure = scanner.nextLine();
+
+                System.out.print("Entrez la promo : ");
+                String promo = scanner.nextLine();
+
+                System.out.print("Entrez le responsable de la réservation : ");
+                String responsable = scanner.nextLine();
+
+                // Vérification des formats de date et d'heure
+                if (outils.isValidDate(date) && outils.isValidTime(heure)) {
+                    requete.faireReservation(idSalle, date, heure, promo, responsable);
+                    System.out.println("Réservation ajoutée avec succès dans la base de données !");
+                } else {
+                    System.out.println("Format de date ou d'heure invalide. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
+                }
+            } else {
+                System.out.println("Salle non trouvée. Veuillez vérifier le numéro de salle et le nom du bâtiment.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de l'ajout de la réservation dans la base de données : " + e.getMessage());
         }
     }
 

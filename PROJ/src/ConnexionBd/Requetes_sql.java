@@ -73,6 +73,26 @@ public class Requetes_sql {
         return listeSalles;
     }
     
+    public int getIdSalle(String numeroSalle, String nomBatiment) throws SQLException {
+        int idSalle = -1; 
+        
+        String query = "SELECT id_salle FROM salles WHERE numeroSalle = ? AND nomBatiment = ?";
+        
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, numeroSalle);
+            pstmt.setString(2, nomBatiment);
+            
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    idSalle = rs.getInt("id_salle"); 
+                }
+            }
+        }
+        
+        return idSalle; 
+    }
+
     public void modifierSalle(String numeroOriginal, String nouveauNumero, String nouveauNomBatiment, int nouveauNumeroEtage, String nomBatimentActuel, int numeroEtageActuel) throws SQLException {
         String query = "UPDATE salles SET numeroSalle = ?, nomBatiment = ?, numeroEtage = ? WHERE numeroSalle = ?";
         try (Connection conn = ConnectBd.getConnection();
@@ -108,6 +128,19 @@ public class Requetes_sql {
              Statement stmt = conn.createStatement()) {
             stmt.execute(query);
             System.out.println("La table 'reservations' a été créée ou existe déjà.");
+        }
+    }
+
+    public void faireReservation(int idSalle, String date, String heure, String promo, String responsable) throws SQLException {
+        String query = "INSERT INTO reservations (id_salle, date, heure, promo, responsable) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, idSalle);
+            pstmt.setString(2, date);
+            pstmt.setString(3, heure);
+            pstmt.setString(4, promo);
+            pstmt.setString(5, responsable);
+            pstmt.executeUpdate();
         }
     }
 

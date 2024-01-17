@@ -16,7 +16,8 @@ public class Main {
             System.out.println("2. Ajouter une nouvelle salle");
             System.out.println("3. Modifier une salle");
             System.out.println("4. Supprimer une salle");
-            System.out.println("5. Quitter");
+            System.out.println("5. Réserver une salle");
+            System.out.println("6. Quitter");
 
             int choix = scanner.nextInt();
             scanner.nextLine(); 
@@ -35,6 +36,9 @@ public class Main {
                     Gestion.supprimerSalle();
                     break;
                 case 5:
+                    Gestion.faireReservation();
+                    break; 
+                case 6:
                     quitter = true;
                     break;
                 default:
