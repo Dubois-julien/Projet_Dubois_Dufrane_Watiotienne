@@ -1,6 +1,7 @@
 package gestion_salles;
 
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
 import ConnexionBd.Requetes_sql;
@@ -195,23 +196,29 @@ public class Gestion {
         String heureFin = scanner.nextLine();
 
         if (outils.isValidDate(date) && outils.isValidTime(heureDebut) && outils.isValidTime(heureFin)) {
-            Requetes_sql requete = new Requetes_sql();
-            try {
-                List<Reservation> reservations = requete.getReservations(date, heureDebut, heureFin);
-                if (reservations.isEmpty()) {
-                    System.out.println("Aucune réservation trouvée pour la plage horaire spécifiée.");
-                } else {
-                	for (Reservation reservation : reservations) {
-                	    System.out.println("Réservation: " + reservation.getIdReservation() +
-                	                       " - Salle: " + reservation.getNumeroSalle() +
-                	                       " - Bâtiment: " + reservation.getNomBatiment() +
-                	                       " - Heure: " + reservation.getHeure() +
-                	                       " - Promo: " + reservation.getPromo() +
-                	                       " - Responsable: " + reservation.getResponsable());
-                	}
+            LocalTime debut = LocalTime.parse(heureDebut);
+            LocalTime fin = LocalTime.parse(heureFin);
+            if (debut.isBefore(fin)) {
+                Requetes_sql requete = new Requetes_sql();
+                try {
+                    List<Reservation> reservations = requete.getReservations(date, heureDebut, heureFin);
+                    if (reservations.isEmpty()) {
+                        System.out.println("Aucune réservation trouvée pour la plage horaire spécifiée.");
+                    } else {
+                    	for (Reservation reservation : reservations) {
+                    	    System.out.println("Réservation: " + reservation.getIdReservation() +
+                    	                       " - Salle: " + reservation.getNumeroSalle() +
+                    	                       " - Bâtiment: " + reservation.getNomBatiment() +
+                    	                       " - Heure: " + reservation.getHeure() +
+                    	                       " - Promo: " + reservation.getPromo() +
+                    	                       " - Responsable: " + reservation.getResponsable());
+                    	}
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Erreur lors de la récupération des réservations : " + e.getMessage());
                 }
-            } catch (SQLException e) {
-                System.out.println("Erreur lors de la récupération des réservations : " + e.getMessage());
+            } else {
+                System.out.println("L'heure de début doit être antérieure à l'heure de fin.");
             }
         } else {
             System.out.println("Formats de date ou d'heure invalides. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
@@ -229,20 +236,26 @@ public class Gestion {
         String heureFin = scanner.nextLine();
         
         if (outils.isValidDate(date) && outils.isValidTime(heureDebut) && outils.isValidTime(heureFin)) {
-            Requetes_sql requete = new Requetes_sql();
-            try {
-                List<String> creneauxLibres = requete.getCreneauxLibres(date, heureDebut, heureFin);
-                if (creneauxLibres.isEmpty()) {
-                    System.out.println("Aucun créneau n'est disponible sur la plage horaire spécifiée.");
-                } else {
-                    System.out.println("Créneaux libres :");
-                    for (String creneau : creneauxLibres) {
-                        System.out.println(creneau);
+        	LocalTime debut = LocalTime.parse(heureDebut);
+            LocalTime fin = LocalTime.parse(heureFin);
+            if (debut.isBefore(fin)) {
+            	Requetes_sql requete = new Requetes_sql();
+                try {
+                    List<String> creneauxLibres = requete.getCreneauxLibres(date, heureDebut, heureFin);
+                    if (creneauxLibres.isEmpty()) {
+                        System.out.println("Aucun créneau n'est disponible sur la plage horaire spécifiée.");
+                    } else {
+                        System.out.println("Créneaux libres :");
+                        for (String creneau : creneauxLibres) {
+                            System.out.println(creneau);
+                        }
                     }
-                }
-            } catch (SQLException e) {
-                System.out.println("Erreur lors de la récupération des créneaux libres : " + e.getMessage());
-            } 
+                } catch (SQLException e) {
+                    System.out.println("Erreur lors de la récupération des créneaux libres : " + e.getMessage());
+                } 
+            } else {
+                System.out.println("L'heure de début doit être antérieure à l'heure de fin.");
+            }
         } else {
             System.out.println("Formats de date ou d'heure invalides. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
         }
