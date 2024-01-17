@@ -201,13 +201,14 @@ public class Gestion {
                 if (reservations.isEmpty()) {
                     System.out.println("Aucune réservation trouvée pour la plage horaire spécifiée.");
                 } else {
-                    for (Reservation reservation : reservations) {
-                        System.out.println("Réservation: " + reservation.getIdReservation() + 
-                                           " - Salle: " + reservation.getIdSalle() + 
-                                           " - Heure: " + reservation.getHeure() + 
-                                           " - Promo: " + reservation.getPromo() + 
-                                           " - Responsable: " + reservation.getResponsable());
-                    }
+                	for (Reservation reservation : reservations) {
+                	    System.out.println("Réservation: " + reservation.getIdReservation() +
+                	                       " - Salle: " + reservation.getNumeroSalle() +
+                	                       " - Bâtiment: " + reservation.getNomBatiment() +
+                	                       " - Heure: " + reservation.getHeure() +
+                	                       " - Promo: " + reservation.getPromo() +
+                	                       " - Responsable: " + reservation.getResponsable());
+                	}
                 }
             } catch (SQLException e) {
                 System.out.println("Erreur lors de la récupération des réservations : " + e.getMessage());

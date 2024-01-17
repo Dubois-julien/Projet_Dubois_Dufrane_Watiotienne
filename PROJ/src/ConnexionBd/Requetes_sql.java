@@ -183,7 +183,10 @@ public class Requetes_sql {
     
     public List<Reservation> getReservations(String date, String heureDebut, String heureFin) throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
-        String query = "SELECT * FROM reservations WHERE date = ? AND heure BETWEEN ? AND ?";
+        String query = "SELECT r.id_reservation, r.id_salle, r.date, r.heure, r.promo, r.responsable, s.numeroSalle, s.nomBatiment " +
+                       "FROM reservations r " +
+                       "JOIN salles s ON r.id_salle = s.id_salle " +
+                       "WHERE r.date = ? AND r.heure BETWEEN ? AND ?";
 
         try (Connection conn = ConnectBd.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -192,9 +195,11 @@ public class Requetes_sql {
             pstmt.setString(3, heureFin);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
+                    // Créer un objet Reservation avec les informations de la salle
                     Reservation reservation = new Reservation(
                         rs.getInt("id_reservation"), 
-                        rs.getInt("id_salle"), 
+                        rs.getString("numeroSalle"), 
+                        rs.getString("nomBatiment"), 
                         rs.getString("date"), 
                         rs.getString("heure"),
                         rs.getString("promo"),
@@ -206,5 +211,6 @@ public class Requetes_sql {
         }
         return reservations;
     }
+
 
 }
