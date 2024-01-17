@@ -23,7 +23,7 @@ public class outils{
 	    Pattern pattern = Pattern.compile("^([01]\\d|2[0-3]):([0-5]\\d)$");
 	    Matcher matcher = pattern.matcher(time);
 	
-	    return matcher.matches(); // Vrai si l'heure est au format HH:mm
+	    return matcher.matches(); 
 	}
 
 }

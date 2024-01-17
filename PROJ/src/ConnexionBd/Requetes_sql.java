@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalTime;
 import java.util.*;
 import gestion_salles.*;
 
@@ -144,5 +145,26 @@ public class Requetes_sql {
         }
     }
 
+    public boolean SalleDisponible(int idSalle, String date, String heure) throws SQLException {
+        LocalTime heureDemandee = LocalTime.parse(heure);
+        LocalTime heureAvant = heureDemandee.minusMinutes(30);
+        LocalTime heureApres = heureDemandee.plusMinutes(30);
+
+        String query = "SELECT COUNT(*) FROM reservations WHERE id_salle = ? AND date = ? " +
+                       "AND (heure BETWEEN ? AND ?)";
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, idSalle);
+            pstmt.setString(2, date);
+            pstmt.setString(3, heureAvant.toString());
+            pstmt.setString(4, heureApres.toString());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) == 0;  
+                }
+            }
+        }
+        return false;
+    }
 
 }
