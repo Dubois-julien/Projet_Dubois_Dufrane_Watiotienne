@@ -218,5 +218,31 @@ public class Gestion {
         }
     }
 
+    public static void afficherCreneauxLibres() {
+        System.out.print("Entrez une date (format yyyy-MM-dd) : ");
+        String date = scanner.nextLine();
+        
+        System.out.print("Entrez l'heure de début (format HH:mm) : ");
+        String heureDebut = scanner.nextLine();
+        
+        System.out.print("Entrez l'heure de fin (format HH:mm) : ");
+        String heureFin = scanner.nextLine();
+
+        Requetes_sql requete = new Requetes_sql();
+        try {
+            List<String> creneauxLibres = requete.getCreneauxLibres(date, heureDebut, heureFin);
+            if (creneauxLibres.isEmpty()) {
+                System.out.println("Aucun créneau n'est disponible sur la plage horaire spécifiée.");
+            } else {
+                System.out.println("Créneaux libres :");
+                for (String creneau : creneauxLibres) {
+                    System.out.println(creneau);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération des créneaux libres : " + e.getMessage());
+        }
+    }
+
 
 }

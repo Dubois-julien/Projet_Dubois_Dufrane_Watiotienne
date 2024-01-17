@@ -195,7 +195,6 @@ public class Requetes_sql {
             pstmt.setString(3, heureFin);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    // Créer un objet Reservation avec les informations de la salle
                     Reservation reservation = new Reservation(
                         rs.getInt("id_reservation"), 
                         rs.getString("numeroSalle"), 
@@ -210,6 +209,37 @@ public class Requetes_sql {
             }
         }
         return reservations;
+    }
+
+    public List<String> getCreneauxLibres(String date, String heureDebut, String heureFin) throws SQLException {
+        List<String> creneauxLibres = new ArrayList<>();
+        LocalTime debut = LocalTime.parse(heureDebut);
+        LocalTime fin = LocalTime.parse(heureFin);
+
+        while (debut.isBefore(fin)) {
+            creneauxLibres.add(debut.toString());
+            debut = debut.plusMinutes(30);
+        }
+
+        String query = "SELECT heure FROM reservations WHERE date = ? AND heure BETWEEN ? AND ?";
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            for (String creneau : new ArrayList<>(creneauxLibres)) {
+                LocalTime heureCreneau = LocalTime.parse(creneau);
+                LocalTime demiHeureAvant = heureCreneau.minusMinutes(30);
+                LocalTime demiHeureApres = heureCreneau.plusMinutes(30);
+                
+                pstmt.setString(1, date);
+                pstmt.setString(2, demiHeureAvant.toString());
+                pstmt.setString(3, demiHeureApres.toString());
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    if (rs.next()) {
+                        creneauxLibres.remove(creneau);
+                    }
+                }
+            }
+        }
+        return creneauxLibres;
     }
 
 
