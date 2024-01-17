@@ -34,14 +34,14 @@ public class Requetes_sql {
         }
     }
     
-    public Salle getInfosSalle(String numeroSalle) throws SQLException {
-        String query = "SELECT * FROM salles WHERE numeroSalle = ?";
+    public Salle getInfosSalle(String numeroSalle, String nomBatiment) throws SQLException {
+        String query = "SELECT * FROM salles WHERE numeroSalle = ? AND nomBatiment = ?";
         try (Connection conn = ConnectBd.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, numeroSalle);
+            pstmt.setString(2, nomBatiment);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    String nomBatiment = rs.getString("nomBatiment");
                     int numeroEtage = rs.getInt("numeroEtage");
 
                     Batiment batiment = new Batiment(nomBatiment);
@@ -72,5 +72,18 @@ public class Requetes_sql {
         }
         return listeSalles;
     }
+    
+    public void modifierSalle(String numeroOriginal, String nouveauNumero, String nouveauNomBatiment, int nouveauNumeroEtage, String nomBatimentActuel, int numeroEtageActuel) throws SQLException {
+        String query = "UPDATE salles SET numeroSalle = ?, nomBatiment = ?, numeroEtage = ? WHERE numeroSalle = ?";
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, nouveauNumero.isEmpty() ? numeroOriginal : nouveauNumero);
+            pstmt.setString(2, nouveauNomBatiment.isEmpty() ? nomBatimentActuel : nouveauNomBatiment);
+            pstmt.setInt(3, nouveauNumeroEtage < 0 ? numeroEtageActuel : nouveauNumeroEtage);
+            pstmt.setString(4, numeroOriginal);
+            pstmt.executeUpdate();
+        }
+    }
+
 
 }

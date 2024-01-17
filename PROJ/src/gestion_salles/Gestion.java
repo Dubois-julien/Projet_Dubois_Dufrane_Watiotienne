@@ -41,10 +41,10 @@ public class Gestion {
         }
     }
     
-    public static void afficherInfosSalle(String numero) {
+    public static void afficherInfosSalle(String numero, String nomBatiment) {
         Requetes_sql requete = new Requetes_sql();
         try {
-            Salle salle = requete.getInfosSalle(numero);
+            Salle salle = requete.getInfosSalle(numero, nomBatiment);
             if (salle != null) {
                 System.out.println("Informations de la salle :");
                 System.out.println("Numéro de la salle: " + salle.getNumeroSalle());
@@ -61,41 +61,45 @@ public class Gestion {
     public static void modifierSalle() {
         System.out.print("Entrez le numéro de la salle à modifier : ");
         String numero = scanner.nextLine();
-        for (Salle salle : salles) {
-            if (salle.getNumeroSalle().equals(numero)) {
-            	afficherInfosSalle(numero);
-            	System.out.print("Nouveau numéro de salle (laissez vide pour ne pas modifier) : ");
+        System.out.print("Entrez le nom du bâtiment de la salle : ");
+        String nomBatiment = scanner.nextLine();
+        Requetes_sql requete = new Requetes_sql();
+
+        try {
+            Salle salle = requete.getInfosSalle(numero, nomBatiment);
+            if (salle != null) {
+                afficherInfosSalle(numero,nomBatiment);
+                System.out.print("Nouveau numéro de salle (laissez vide pour ne pas modifier) : ");
                 String nouveauNumero = scanner.nextLine();
-                if (!nouveauNumero.isEmpty()) {
-                    salle.setNumeroSalle(nouveauNumero);
-                }
 
                 System.out.print("Nouveau nom de bâtiment (laissez vide pour ne pas modifier) : ");
                 String nouveauNomBatiment = scanner.nextLine();
-                if (!nouveauNomBatiment.isEmpty()) {
-                    salle.getBatiment().setNom(nouveauNomBatiment);
-                }
 
                 System.out.print("Nouveau numéro d'étage (entrez un nombre négatif pour ne pas modifier) : ");
                 int nouveauNumeroEtage = scanner.nextInt();
                 scanner.nextLine(); 
-                if (nouveauNumeroEtage >= 0) {
-                    salle.getEtage().setNumeroEtage(nouveauNumeroEtage);
-                }
+                
+                String nomBatimentActuel = salle.getBatiment().getNom();
+                int numeroEtageActuel = salle.getEtage().getNumeroEtage();
 
+                requete.modifierSalle(numero, nouveauNumero, nouveauNomBatiment, nouveauNumeroEtage, nomBatimentActuel, numeroEtageActuel);
                 System.out.println("Salle modifiée avec succès !");
-                return;
+            } else {
+                System.out.println("Salle non trouvée.");
             }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la modification de la salle : " + e.getMessage());
         }
-        System.out.println("Salle non trouvée.");
     }
 
     public static void supprimerSalle() {
         System.out.print("Entrez le numéro de la salle à supprimer : ");
         String numero = scanner.nextLine();
+        System.out.print("Entrez le batiment de la salle à supprimer : ");
+        String nomBatiment = scanner.nextLine();
         for (int i = 0; i < salles.size(); i++) {
-            if (salles.get(i).getNumeroSalle().equals(numero)) {
-            	afficherInfosSalle(numero);
+            if (salles.get(i).getNumeroSalle().equals(numero) && salles.get(i).getBatiment().getNom().equals(nomBatiment)) {
+            	afficherInfosSalle(numero,nomBatiment);
             	salles.remove(i);
                 System.out.println("Salle supprimée avec succès !");
                 return;
