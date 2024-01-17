@@ -149,9 +149,16 @@ public class Requetes_sql {
         LocalTime heureDemandee = LocalTime.parse(heure);
         LocalTime heureAvant = heureDemandee.minusMinutes(30);
         LocalTime heureApres = heureDemandee.plusMinutes(30);
-
+        LocalTime heureDebut = LocalTime.of(8, 0);
+        LocalTime heureFin = LocalTime.of(18, 0);
+        
+        if (heureDemandee.isBefore(heureDebut) || heureDemandee.isAfter(heureFin)) {
+            System.out.println("Les réservations ne sont autorisées qu'entre 8h00 et 18h00.");
+            return false;
+        }
         String query = "SELECT COUNT(*) FROM reservations WHERE id_salle = ? AND date = ? " +
                        "AND (heure BETWEEN ? AND ?)";
+        
         try (Connection conn = ConnectBd.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, idSalle);
