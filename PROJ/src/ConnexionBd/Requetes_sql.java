@@ -181,18 +181,20 @@ public class Requetes_sql {
         return true; 
     }
     
-    public List<Reservation> getReservations(String date, String heureDebut, String heureFin) throws SQLException {
+    public List<Reservation> getReservations(String date, String heureDebut, String heureFin, String numeroSalle, String nomBatiment) throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
         String query = "SELECT r.id_reservation, r.id_salle, r.date, r.heure, r.promo, r.responsable, s.numeroSalle, s.nomBatiment " +
                        "FROM reservations r " +
                        "JOIN salles s ON r.id_salle = s.id_salle " +
-                       "WHERE r.date = ? AND r.heure BETWEEN ? AND ?";
+                       "WHERE r.date = ? AND r.heure BETWEEN ? AND ? AND s.numeroSalle= ? AND s.nomBatiment = ?";
 
         try (Connection conn = ConnectBd.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, date);
             pstmt.setString(2, heureDebut);
             pstmt.setString(3, heureFin);
+            pstmt.setString(4, numeroSalle);
+            pstmt.setString(5, nomBatiment);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     Reservation reservation = new Reservation(
@@ -211,7 +213,7 @@ public class Requetes_sql {
         return reservations;
     }
 
-    public List<String> getCreneauxLibres(String date, String heureDebut, String heureFin) throws SQLException {
+    public List<String> getCreneauxLibres(String date, String heureDebut, String heureFin, String numeroSalle, String nomBatiment) throws SQLException {
         List<String> creneauxLibres = new ArrayList<>();
         LocalTime debut = LocalTime.parse(heureDebut);
         LocalTime fin = LocalTime.parse(heureFin);
@@ -221,7 +223,9 @@ public class Requetes_sql {
             debut = debut.plusMinutes(30);
         }
 
-        String query = "SELECT heure FROM reservations WHERE date = ? AND heure BETWEEN ? AND ?";
+        String query = "SELECT heure FROM reservations r " +
+                "JOIN salles s ON r.id_salle = s.id_salle " +
+                "WHERE r.date = ? AND r.heure BETWEEN ? AND ? AND s.numeroSalle = ? AND s.nomBatiment = ?";
         try (Connection conn = ConnectBd.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             for (String creneau : new ArrayList<>(creneauxLibres)) {
@@ -232,6 +236,8 @@ public class Requetes_sql {
                 pstmt.setString(1, date);
                 pstmt.setString(2, demiHeureAvant.toString());
                 pstmt.setString(3, demiHeureApres.toString());
+                pstmt.setString(4, numeroSalle);
+                pstmt.setString(5, nomBatiment);
                 try (ResultSet rs = pstmt.executeQuery()) {
                     if (rs.next()) {
                         creneauxLibres.remove(creneau);
@@ -243,15 +249,17 @@ public class Requetes_sql {
     }
 
 
-    public Reservation getReservation(String date, String heure) throws SQLException {
+    public Reservation getReservation(String date, String heure, String numeroSalle, String nomBatiment) throws SQLException {
         String query = "SELECT r.id_reservation, r.id_salle, r.date, r.heure, r.promo, r.responsable, s.numeroSalle, s.nomBatiment " +
                        "FROM reservations r " +
                        "JOIN salles s ON r.id_salle = s.id_salle " +
-                       "WHERE r.date = ? AND r.heure = ?";
+                       "WHERE r.date = ? AND r.heure = ? AND s.numeroSalle = ? AND nomBatiment= ?";
         try (Connection conn = ConnectBd.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, date);
             pstmt.setString(2, heure);
+            pstmt.setString(3, numeroSalle);
+            pstmt.setString(4, nomBatiment);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     return new Reservation(

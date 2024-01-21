@@ -186,6 +186,12 @@ public class Gestion {
     }
 
     public static void afficherReservations() {
+        System.out.print("Entrez le numéro de la salle : ");
+        String numeroSalle = scanner.nextLine();   
+        
+        System.out.print("Entrez le nom du bâtiment : ");
+        String nomBatiment = scanner.nextLine();      
+    	
         System.out.print("Entrez une date (format yyyy-MM-dd) : ");
         String date = scanner.nextLine();
         
@@ -201,7 +207,7 @@ public class Gestion {
             if (debut.isBefore(fin)) {
                 Requetes_sql requete = new Requetes_sql();
                 try {
-                    List<Reservation> reservations = requete.getReservations(date, heureDebut, heureFin);
+                    List<Reservation> reservations = requete.getReservations(date, heureDebut, heureFin,numeroSalle, nomBatiment);
                     if (reservations.isEmpty()) {
                         System.out.println("Aucune réservation trouvée pour la plage horaire spécifiée.");
                     } else {
@@ -226,6 +232,12 @@ public class Gestion {
     }
 
     public static void afficherCreneauxLibres() {
+        System.out.print("Entrez le numéro de la salle : ");
+        String numeroSalle = scanner.nextLine();   
+        
+        System.out.print("Entrez le nom du bâtiment : ");
+        String nomBatiment = scanner.nextLine();    
+        
         System.out.print("Entrez une date (format yyyy-MM-dd) : ");
         String date = scanner.nextLine();
         
@@ -241,7 +253,7 @@ public class Gestion {
             if (debut.isBefore(fin)) {
             	Requetes_sql requete = new Requetes_sql();
                 try {
-                    List<String> creneauxLibres = requete.getCreneauxLibres(date, heureDebut, heureFin);
+                    List<String> creneauxLibres = requete.getCreneauxLibres(date, heureDebut, heureFin, numeroSalle, nomBatiment);
                     if (creneauxLibres.isEmpty()) {
                         System.out.println("Aucun créneau n'est disponible sur la plage horaire spécifiée.");
                     } else {
@@ -262,7 +274,13 @@ public class Gestion {
     }
     
     public static void afficherInfosReservation() {
-        System.out.print("Entrez la date de la réservation (format yyyy-MM-dd) : ");
+        System.out.print("Entrez le numéro de la salle : ");
+        String numeroSalle = scanner.nextLine();   
+        
+        System.out.print("Entrez le nom du bâtiment : ");
+        String nomBatiment = scanner.nextLine();    
+ 
+    	System.out.print("Entrez la date de la réservation (format yyyy-MM-dd) : ");
         String date = scanner.nextLine();
 
         System.out.print("Entrez l'heure de la réservation (format HH:mm) : ");
@@ -271,7 +289,7 @@ public class Gestion {
         if (outils.isValidDate(date) && outils.isValidTime(heure)) {
         	Requetes_sql requete = new Requetes_sql();
             try {
-                Reservation reservation = requete.getReservation(date, heure);
+                Reservation reservation = requete.getReservation(date, heure,nomBatiment, numeroSalle);
                 if (reservation != null) {
                     System.out.println("Détails de la réservation :");
                     System.out.println("ID Réservation: " + reservation.getIdReservation());
