@@ -13,6 +13,12 @@ public class Requetes_sql {
 
     public void ajouterSalle(Salle salle) throws SQLException {
         String query = "INSERT INTO salles (numeroSalle, nomBatiment, numeroEtage) VALUES (?, ?, ?)";
+        if (salleExiste(salle)) {
+            throw new SQLException("La salle avec le numéro " + salle.getNumeroSalle() + 
+                                   " dans le bâtiment " + salle.getBatiment().getNom() + 
+                                   " existe déjà.");
+        }
+        
         try (Connection conn = ConnectBd.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setString(1, salle.getNumeroSalle());
@@ -21,7 +27,21 @@ public class Requetes_sql {
             pstmt.executeUpdate();
         }
     }
-
+    
+    public boolean salleExiste(Salle salle) throws SQLException {
+        String query = "SELECT COUNT(*) FROM salles WHERE numeroSalle = ? AND nomBatiment = ?";
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, salle.getNumeroSalle());
+            pstmt.setString(2, salle.getBatiment().getNom());
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
     public void creerTableSalles() throws SQLException {
         String query = "CREATE TABLE IF NOT EXISTS salles (" +
                        "id_salle INT AUTO_INCREMENT PRIMARY KEY," +
