@@ -6,10 +6,14 @@ import java.util.List;
 import java.util.Scanner;
 import ConnexionBd.Requetes_sql;
 import outils.outils;
-
+/**
+ * Classe Gestion pour gérer les interactions avec la base de données concernant les salles.
+ */
 public class Gestion {
     private static Scanner scanner = new Scanner(System.in);
-    
+    /**
+     * Initialise la base de données en créant les tables nécessaires.
+     */
     public static void initialiserBaseDeDonnees() {
         Requetes_sql requete = new Requetes_sql();
         try {
@@ -19,7 +23,10 @@ public class Gestion {
             System.out.println("Erreur lors de la création des tables : " + e.getMessage());
         }
     }
-    
+    /**
+     * Permet d'ajouter une nouvelle salle à la base de données.
+     * C'est l'utilisateur qui les informations
+     */
     public static void ajouterSalle() {
         System.out.println("Ajouter une nouvelle salle :");
         System.out.print("Entrez le numéro de la salle : ");
@@ -41,7 +48,11 @@ public class Gestion {
             System.out.println("Erreur lors de l'ajout de la salle dans la base de données : " + e.getMessage());
         }
     }
-    
+    /**
+     * Affiche les informations d'une salle spécifique.
+     * @param numero Le numéro de la salle.
+     * @param nomBatiment Le nom du bâtiment de la salle.
+     */
     public static void afficherInfosSalle(String numero, String nomBatiment) {
         Requetes_sql requete = new Requetes_sql();
         try {
@@ -58,7 +69,10 @@ public class Gestion {
         System.out.println("Erreur lors de la récupération des informations de la salle : " + e.getMessage());
         }
     }
-    
+    /**
+     * Permet de modifier les informations d'une salle existante.
+     * C'est l'utilisateur qui les informations
+     */
     public static void modifierSalle() {
         System.out.print("Entrez le numéro de la salle à modifier : ");
         String numero = scanner.nextLine();
@@ -92,7 +106,10 @@ public class Gestion {
             System.out.println("Erreur lors de la modification de la salle : " + e.getMessage());
         }
     }
-
+    /**
+     * Supprime une salle de la base de données.
+     * C'est l'utilisateur qui les informations
+     */
     public static void supprimerSalle() {
         System.out.print("Entrez le numéro de la salle à supprimer : ");
         String numero = scanner.nextLine();
@@ -121,7 +138,10 @@ public class Gestion {
         }
     }
 
-    
+    /**
+     * Affiche toutes les salles enregistrées dans la base de données.
+     * C'est l'utilisateur qui les informations
+     */
     public static void afficherToutesLesSalles() {
         Requetes_sql requete = new Requetes_sql();
         try {
@@ -141,7 +161,10 @@ public class Gestion {
             System.out.println("Erreur lors de la récupération des salles : " + e.getMessage());
         }
     }
-
+    /**
+     * Ajoute une nouvelle réservation pour une salle.
+     * C'est l'utilisateur qui les informations
+     */
     public static void faireReservation() {
         System.out.println("Ajouter une nouvelle réservation :");
 
@@ -184,7 +207,10 @@ public class Gestion {
             System.out.println("Erreur lors de l'ajout de la réservation dans la base de données : " + e.getMessage());
         }
     }
-
+    /**
+     * Affiche les réservations pour une salle spécifique sur une plage horaire donnée.
+     *C'est l'utilisateur qui les informations
+     */
     public static void afficherReservations() {
         System.out.print("Entrez le numéro de la salle : ");
         String numeroSalle = scanner.nextLine();   
@@ -230,7 +256,10 @@ public class Gestion {
             System.out.println("Formats de date ou d'heure invalides. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
         }
     }
-
+    /**
+     * Affiche les créneaux libres pour une salle spécifique sur une plage horaire donnée.
+     * C'est l'utilisateur qui les informations
+     */
     public static void afficherCreneauxLibres() {
         System.out.print("Entrez le numéro de la salle : ");
         String numeroSalle = scanner.nextLine();   
@@ -272,7 +301,10 @@ public class Gestion {
             System.out.println("Formats de date ou d'heure invalides. Veuillez respecter les formats yyyy-MM-dd et HH:mm.");
         }
     }
-    
+    /**
+     * Affiche les informations détaillées d'une réservation spécifique.
+     * C'est l'utilisateur qui les informations
+     */
     public static void afficherInfosReservation() {
         System.out.print("Entrez le numéro de la salle : ");
         String numeroSalle = scanner.nextLine();   
