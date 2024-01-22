@@ -9,8 +9,17 @@ import java.time.LocalTime;
 import java.util.*;
 import gestion_salles.*;
 
+
+/**
+ * Classe Requetes_sql pour effectuer les opérations sur la base de données
+ */
 public class Requetes_sql {
 
+	/**
+	 * Ajoute une salle à la base de données
+	 * @param salle L'objet Salle à ajouter
+	 * @throws SQLException si la salle existe déjà
+	 */
     public void ajouterSalle(Salle salle) throws SQLException {
         String query = "INSERT INTO salles (numeroSalle, nomBatiment, numeroEtage) VALUES (?, ?, ?)";
         if (salleExiste(salle)) {
@@ -27,7 +36,11 @@ public class Requetes_sql {
             pstmt.executeUpdate();
         }
     }
-    
+    /**
+     * Verifie si une salle existe déjà dans la base de données
+     * @param salle 
+     * @return true si la salle existe, false sinon
+     */
     public boolean salleExiste(Salle salle) throws SQLException {
         String query = "SELECT COUNT(*) FROM salles WHERE numeroSalle = ? AND nomBatiment = ?";
         try (Connection conn = ConnectBd.getConnection();
@@ -42,6 +55,9 @@ public class Requetes_sql {
         }
         return false;
     }
+    /**
+     * Création de la table 'salles' dans la base de données si elle n'existe pas.
+     */
     public void creerTableSalles() throws SQLException {
         String query = "CREATE TABLE IF NOT EXISTS salles (" +
                        "id_salle INT AUTO_INCREMENT PRIMARY KEY," +
@@ -54,7 +70,12 @@ public class Requetes_sql {
             System.out.println("La table 'salles' a été créée ou existe déjà.");
         }
     }
-    
+    /**
+     * Obtenir les informations d'une salle spécifique
+     * @param numeroSalle le numero de la salle
+     * @param nomBatiment le nom du batiment 
+     * @return L'objet Salle correspondant ou null si la salle n'existe pas 
+     */
     public Salle getInfosSalle(String numeroSalle, String nomBatiment) throws SQLException {
         String query = "SELECT * FROM salles WHERE numeroSalle = ? AND nomBatiment = ?";
         try (Connection conn = ConnectBd.getConnection();
@@ -73,7 +94,10 @@ public class Requetes_sql {
         }
         return null; 
     }
-    
+    /**
+     * Recupere la liste de toutes les salles de la base de données.
+     * @return Une liste d'objets Salle.
+     */
     public List<Salle> getToutesLesSalles() throws SQLException {
         List<Salle> listeSalles = new ArrayList<>();
         String query = "SELECT * FROM salles";
@@ -93,7 +117,12 @@ public class Requetes_sql {
         }
         return listeSalles;
     }
-    
+    /**
+     * Recupere l'ID d'une salle spécifique dans la base de données.
+     * @param numeroSalle le numero de la salle
+     * @param nomBatiment le nom du batiement
+     * @return L'ID de la salle, ou -1 si elle n'existe pas.
+     */
     public int getIdSalle(String numeroSalle, String nomBatiment) throws SQLException {
         int idSalle = -1; 
         
@@ -113,7 +142,15 @@ public class Requetes_sql {
         
         return idSalle; 
     }
-
+    /**
+     * Modifie les informations d'une salle existante dans la base de données.
+     * @param numeroOriginal le numero actuel de la salle
+     * @param nouveauNumero le nouveau numéro de la salle, ou vide pour ne pas changer
+     * @param nouveauNomBatiment le nouveau nom du batiment, ou vide pour ne pas changer
+     * @param nouveauNumeroEtage le nouveau numéro d'étage, ou -1 pour ne pas changer
+     * @param nomBatimentActuel le nom actuel du batiment
+     * @param numeroEtageActuel le numero actuel de l'étage
+     */
     public void modifierSalle(String numeroOriginal, String nouveauNumero, String nouveauNomBatiment, int nouveauNumeroEtage, String nomBatimentActuel, int numeroEtageActuel) throws SQLException {
         String query = "UPDATE salles SET numeroSalle = ?, nomBatiment = ?, numeroEtage = ? WHERE numeroSalle = ?";
         try (Connection conn = ConnectBd.getConnection();
@@ -125,7 +162,11 @@ public class Requetes_sql {
             pstmt.executeUpdate();
         }
     }
-
+    /**
+     * Supprime une salle de la base de données
+     * @param numeroSalle Le numéro de la salle à supprimer
+     * @param nomBatiment Le nom du batiment de la salle à supprimer
+     */
     public void supprimerSalle(String numeroSalle, String nomBatiment) throws SQLException {
         String query = "DELETE FROM salles WHERE numeroSalle = ? AND nomBatiment = ?";
         try (Connection conn = ConnectBd.getConnection();
@@ -135,7 +176,9 @@ public class Requetes_sql {
             pstmt.executeUpdate();
         }
     }
-    
+    /**
+     * Création de la table Réservation
+     */
     public void creerTableReservations() throws SQLException {
         String query = "CREATE TABLE IF NOT EXISTS reservations (" +
                        "id_reservation INT AUTO_INCREMENT PRIMARY KEY," +
@@ -151,7 +194,14 @@ public class Requetes_sql {
             System.out.println("La table 'reservations' a été créée ou existe déjà.");
         }
     }
-
+    /**
+     * Inclure dans la table réservation une nouvelle réservation avec les paramétres suivants:
+     * @param idSalle l'identifiant de la salle
+     * @param date La date de la réservation
+     * @param heure l'heure du début de la réservation (pour une heure)
+     * @param promo la promotion pour laquelle la salle est réservé
+     * @param responsable le responsable, celui qui a effectué la reservation
+     */
     public void faireReservation(int idSalle, String date, String heure, String promo, String responsable) throws SQLException {
         String query = "INSERT INTO reservations (id_salle, date, heure, promo, responsable) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConnectBd.getConnection();
@@ -164,7 +214,14 @@ public class Requetes_sql {
             pstmt.executeUpdate();
         }
     }
-
+    /**
+     * Vérifie si une salle est disponible pour une réservation à une date et une heure spécifiques.
+     *
+     * @param idSalle L'identifiant de la salle.
+     * @param date La date pour laquelle la disponibilité est vérifiée.
+     * @param heure L'heure pour laquelle la disponibilité est vérifiée.
+     * @return true si la salle est disponible, false sinon.
+     */
     public boolean SalleDisponible(int idSalle, String date, String heure) throws SQLException {
         LocalTime heureDemandee = LocalTime.parse(heure);
         
@@ -200,7 +257,16 @@ public class Requetes_sql {
         }
         return true; 
     }
-    
+    /**
+     * Obtient une liste de réservations pour une salle spécifique et un créneau horaire donné.
+     *
+     * @param date La date des réservations.
+     * @param heureDebut L'heure de début des réservations à récupérer.
+     * @param heureFin L'heure de fin des réservations à récupérer.
+     * @param numeroSalle Le numéro de la salle.
+     * @param nomBatiment Le nom du bâtiment de la salle.
+     * @return Une liste d'objets Reservation.
+     */
     public List<Reservation> getReservations(String date, String heureDebut, String heureFin, String numeroSalle, String nomBatiment) throws SQLException {
         List<Reservation> reservations = new ArrayList<>();
         String query = "SELECT r.id_reservation, r.id_salle, r.date, r.heure, r.promo, r.responsable, s.numeroSalle, s.nomBatiment " +
@@ -233,6 +299,16 @@ public class Requetes_sql {
         return reservations;
     }
 
+    /**
+     * Obtient une liste de créneaux horaires libres pour une salle spécifique et un jour donné.
+     *
+     * @param date La date pour laquelle les créneaux sont vérifiés.
+     * @param heureDebut L'heure de début pour la vérification des créneaux.
+     * @param heureFin L'heure de fin pour la vérification des créneaux.
+     * @param numeroSalle Le numéro de la salle.
+     * @param nomBatiment Le nom du bâtiment de la salle.
+     * @return Une liste de créneaux horaires disponibles.
+     */
     public List<String> getCreneauxLibres(String date, String heureDebut, String heureFin, String numeroSalle, String nomBatiment) throws SQLException {
         List<String> creneauxLibres = new ArrayList<>();
         LocalTime debut = LocalTime.parse(heureDebut);
@@ -268,6 +344,15 @@ public class Requetes_sql {
         return creneauxLibres;
     }
 
+    /**
+     * Récupère les détails d'une réservation spécifique.
+     *
+     * @param date La date de la réservation.
+     * @param heure L'heure de la réservation.
+     * @param numeroSalle Le numéro de la salle réservée.
+     * @param nomBatiment Le nom du bâtiment de la salle réservée.
+     * @return Un objet Reservation si la réservation est trouvée, null sinon.
+     */
 
     public Reservation getReservation(String date, String heure, String numeroSalle, String nomBatiment) throws SQLException {
         String query = "SELECT r.id_reservation, r.id_salle, r.date, r.heure, r.promo, r.responsable, s.numeroSalle, s.nomBatiment " +
