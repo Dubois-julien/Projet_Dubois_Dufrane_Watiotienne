@@ -2,10 +2,15 @@ package main;
 
 import gestion_salles.*;
 import java.util.Scanner;
-
+/**
+ * Classe principale de l'application de gestion de salles.
+ * On peut interagir avec le système de gestion de salles.
+ */
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
-
+    /**
+     * Présente un menu d'options pour gérer les salles et les réservations.
+     */
     public static void main(String[] args) {
         Gestion.initialiserBaseDeDonnees();
     	boolean quitter = false;
