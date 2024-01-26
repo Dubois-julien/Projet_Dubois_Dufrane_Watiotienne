@@ -1,10 +1,9 @@
 https://dbconcept.tuxfamily.org/online/index.html
 
-Exmple d'utilisation : 
+Exmple d'utilisation pour notre base de données : 
 
-Salle: ID_Salle, Batiment, Etage, Numero
+salles: id_salle, numeroSalle, nomBatiment, numeroEtage
 
-participe, 1N Salle, 11 Reservation: 
+appartiennent, 0N salles, 11 reservations: 
 
-Reservation: ID_Reservation, Date, Heure, Promo, Responsable
-
+reservations: id_reservation,  date, heure, promo, responsable
