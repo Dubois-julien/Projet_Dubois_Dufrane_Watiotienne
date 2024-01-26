@@ -71,6 +71,43 @@ public class Requetes_sql {
         }
     }
     /**
+     * Afficher toutes les reservations en parcourant la table reservation est affiche son contenu
+     */
+    public static void afficherAllReservation() {
+        String query = "SELECT r.id_reservation, s.numeroSalle, s.nomBatiment, r.date, r.heure, r.promo, r.responsable " +
+                       "FROM reservations r " +
+                       "INNER JOIN salles s ON r.id_salle = s.id_salle";
+
+        try (Connection conn = ConnectBd.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                int idReservation = rs.getInt("id_reservation");
+                String numeroSalle = rs.getString("numeroSalle");
+                String nomBatiment = rs.getString("nomBatiment");
+                String date = rs.getString("date");
+                String heureDebut = rs.getString("heure");
+                String promo = rs.getString("promo");
+                String responsable = rs.getString("responsable");
+
+                System.out.println("ID de la réservation : " + idReservation);
+                System.out.println("Numéro de salle : " + numeroSalle);
+                System.out.println("Nom du bâtiment : " + nomBatiment);
+                System.out.println("Date : " + date);
+                System.out.println("Heure de début : " + heureDebut);
+                System.out.println("Promo : " + promo);
+                System.out.println("Responsable : " + responsable);
+                System.out.println("-----------------------");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la récupération des réservations : " + e.getMessage());
+        }
+    }
+
+
+    /**
      * Obtenir les informations d'une salle spécifique
      * @param numeroSalle le numero de la salle
      * @param nomBatiment le nom du batiment 

@@ -2,6 +2,8 @@ package main;
 
 import gestion_salles.*;
 import java.util.Scanner;
+
+import ConnexionBd.Requetes_sql;
 /**
  * Classe principale de l'application de gestion de salles.
  * On peut interagir avec le système de gestion de salles.
@@ -25,7 +27,8 @@ public class Main {
             System.out.println("6. Afficher les créneaux libres");
             System.out.println("7. Réserver une salle");
             System.out.println("8. Afficher les informations d'une réservation");
-            System.out.println("9. Quitter");
+            System.out.println("9. Afficher l'ensemble des réservations");
+            System.out.println("10. Quitter");
 
             int choix = scanner.nextInt();
             scanner.nextLine(); 
@@ -56,6 +59,10 @@ public class Main {
                 	Gestion.afficherInfosReservation();
                 	break;
                 case 9:
+                    Requetes_sql requete = new Requetes_sql();
+                	Requetes_sql.afficherAllReservation();
+                	break;
+                case 10:
                     quitter = true;
                     break;
                 default:
