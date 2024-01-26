@@ -279,7 +279,14 @@ public class Gestion {
         
         System.out.print("Entrez l'heure de fin (format HH:mm) : ");
         String heureFin = scanner.nextLine();
-
+        if (heureDebut.compareTo("08:00") < 0) {
+            heureDebut = "08:00";
+            System.out.println("L'heure de début a été ajustée à 08:00 (heure minimal pour une reservation).");
+        }
+        if (heureFin.compareTo("18:00") > 0) {
+            heureFin = "18:00";
+            System.out.println("L'heure de fin a été ajustée à 18:00 (heure maximale pour une resservation).");
+        }
         if (outils.isValidDate(date) && outils.isValidTime(heureDebut) && outils.isValidTime(heureFin)) {
         	LocalTime debut = LocalTime.parse(heureDebut);
             LocalTime fin = LocalTime.parse(heureFin);
