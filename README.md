@@ -2,7 +2,7 @@
 
 ## Informations Importantes
 
-Pour exécuter l'application, assurez-vous d'ajouter le connecteur MySQL JDBC suivant à votre projet : `mysql-connector-j-8.0.31.jar`.
+Pour exécuter l'application, assurez-vous d'ajouter le connecteur MySQL JDBC suivant à votre projet : `mysql-connector-j-8.0.31.jar` il peut être télécharger via ce lien : https://repo1.maven.org/maven2/com/mysql/mysql-connector-j/8.0.31/
 Vérifiez également dans le fichier `ConnectBd.java` du package `ConnexionBd` que l'URL, l'identifiant et le mot de passe sont en accord avec ceux définis lors de la configuration de votre utilitaire de base de données (tel que DBeaver). 
 
 Les modèles sont disponibles à la visualisation (`MLD.PNG` et `MCD.PNG`).
@@ -59,7 +59,5 @@ Le projet contient :
 Améliorer la structure globale de la base de données, par exemple intégrer bien plus de bâtiments (et donc en faire une entité à part entière).
 
 Ajouter d'autres informations sur chaque bâtiment/salle.
-
-Ajouter d'autres fonctionnalités (comme afficher l'ensemble des réservations pour toutes les salles permettant de savoir quelle salle est disponible à quel moment).
 
 Améliorer l'aspect visuel de l'application (interface graphique). 
