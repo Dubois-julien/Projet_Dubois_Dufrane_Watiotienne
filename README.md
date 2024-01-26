@@ -7,6 +7,8 @@ Vérifiez également dans le fichier `ConnectBd.java` du package `ConnexionBd` q
 
 Les modèles sont disponibles à la visualisation (`MLD.PNG` et `MCD.PNG`).
 
+Lire les fonctionnalités suivantes pour les détails d'utilisation :
+
 ## Fonctionnalités disponibles
 L’université a besoin de créer les emplois du temps de réservation des salles informatiques à l’intérieur du campus.
 
@@ -24,36 +26,40 @@ L'application a pour but :
     
   • Ajouter une réservation dans une salle :
   
-    o Une date
+    o Une date (au format YYYY-MM-DD)
     
-    o Une heure
+    o Une heure (au format XX:00 ou XX:30). Les réservations sont possibles toutes les 30 minutes et l'on considère 
     
-    o Une promo
+    qu'une réservation dure 1h, sur un créneau de réservation de 8h à 18h car les salles ferment à 19h.
+    
+    o Une promo (par exemple M2 ISN)
     
     o Un responsable de la réservation
     
-  • Un affichage des créneaux libres sur une plage donnée
+  • Un affichage des créneaux libres sur une plage donnée (et pour une salle donnée). Si la plage horaire dépasse les heures disponibles alors on affiche uniquement les créneaux possibles (entre 8h et 18h).
   
-  • Une liste des réservations sur une plage donnée
+  • Une liste des réservations sur une plage donnée (On considère que l'on veut la liste pour une salle donnée afin de vérifier qui l'a réservée par exemple).
   
-  • Un affichage du détail d’une réservation choisie
+  • Un affichage du détail d’une réservation choisie (Si l'on veut obtenir toutes les informations d'une réservation spécifique).
   
-A la fermeture de l’application, les données saisies sont conservées dans une base de données et restituées à la prochaine ouverture.
+A la fermeture de l’application, les données saisies sont conservées dans une base de données (en local uniquement) et restituées à la prochaine ouverture.
 
 Le projet contient :
 
-  • MCD / MLD / MPD
+  • MCD / MLD 
   
-  • Script de création de la base de données
+  • Script de création des tables de la base de données
 
-  • Les sources de votre projet Java
+  • Les sources du projet Java
   
-  • Une documentation éventuelle
+  • Une documentation 
 
 ## Evolutions futures possibles
 
 Améliorer la structure globale de la base de données, par exemple intégrer bien plus de bâtiments (et donc en faire une entité à part entière).
 
 Ajouter d'autres informations sur chaque bâtiment/salle.
+
+Ajouter d'autres fonctionnalités (comme afficher l'ensemble des réservations pour toutes les salles permettant de savoir quelle salle est disponible à quel moment).
 
 Améliorer l'aspect visuel de l'application (interface graphique). 
