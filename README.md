@@ -1,12 +1,13 @@
 # Projet_Dubois_Dufrane_Watiotienne
 
+## Fonctionnalités disponibles
 L’université a besoin de créer les emplois du temps de réservation des salles informatiques à l’intérieur du campus.
 
 L'application a pour but :   
 
   • Ajouter/modifier/supprimer une salle
   
-    Une salle devra être identifiée par :
+    Une salle est identifiée par :
     
     o un bâtiment
     
@@ -37,9 +38,20 @@ Le projet contient :
   • MCD / MLD / MPD
   
   • Script de création de la base de données
-  
-  • Un fichier docker compose pour la création de la BDD
-  
+
   • Les sources de votre projet Java
   
   • Une documentation éventuelle
+
+## Informations Importantes
+
+Pour exécuter l'application, assurez-vous d'ajouter le connecteur MySQL JDBC suivant à votre projet : `mysql-connector-j-8.0.31.jar`.
+Vérifiez également dans le fichier `ConnectBd.java` du package `ConnexionBd` que l'URL, l'identifiant et le mot de passe sont en accord avec ceux définis lors de la configuration de votre utilitaire de base de données (tel que DBeaver).
+
+## Evolutions futures possibles
+
+Améliorer la structure globale de la base de données, par exemple intégrer bien plus de bâtiments (et donc en faire une entité à part entière).
+
+Ajouter d'autres informations sur chaque bâtiment/salle.
+
+Améliorer l'aspect visuel de l'application (interface graphique). 
