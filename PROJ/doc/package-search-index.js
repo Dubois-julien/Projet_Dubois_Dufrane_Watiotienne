@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"ConnexionBd"},{"l":"gestion_salles"},{"l":"main"},{"l":"outils"}];updateSearchResults();
