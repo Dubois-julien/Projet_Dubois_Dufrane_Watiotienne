@@ -64,4 +64,5 @@ public class Salle {
     public void setEtage(Etage etage) {
         this.etage = etage;
     }
+
 }

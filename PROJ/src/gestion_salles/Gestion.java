@@ -116,7 +116,6 @@ public class Gestion {
         System.out.print("Entrez le nom du bâtiment de la salle : ");
         String nomBatiment = scanner.nextLine();
         Requetes_sql requete = new Requetes_sql();
-
         try {
             Salle salle = requete.getInfosSalle(numero, nomBatiment);
             if (salle != null) {
@@ -125,8 +124,13 @@ public class Gestion {
                 String confirmation = scanner.nextLine().trim().toUpperCase();
 
                 if (confirmation.equals("O")) {
-                    requete.supprimerSalle(numero, nomBatiment);
-                    System.out.println("Salle supprimée avec succès !");
+                	int idSalle = requete.getIdSalle(numero,nomBatiment);
+                    if (Requetes_sql.supprimerReservationsSalle(idSalle)) {
+                    	requete.supprimerSalle(numero, nomBatiment);
+                        System.out.println("Salle supprimée avec succès !");
+                    } else {
+                        System.out.println("La suppression des réservations a échoué.");
+                    }
                 } else {
                     System.out.println("Suppression annulée.");
                 }
@@ -275,7 +279,7 @@ public class Gestion {
         
         System.out.print("Entrez l'heure de fin (format HH:mm) : ");
         String heureFin = scanner.nextLine();
-        
+
         if (outils.isValidDate(date) && outils.isValidTime(heureDebut) && outils.isValidTime(heureFin)) {
         	LocalTime debut = LocalTime.parse(heureDebut);
             LocalTime fin = LocalTime.parse(heureFin);

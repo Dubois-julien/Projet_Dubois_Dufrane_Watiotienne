@@ -94,6 +94,7 @@ public class Requetes_sql {
         }
         return null; 
     }
+
     /**
      * Recupere la liste de toutes les salles de la base de données.
      * @return Une liste d'objets Salle.
@@ -176,6 +177,22 @@ public class Requetes_sql {
             pstmt.executeUpdate();
         }
     }
+    /**
+     * Supprime une réservation de la base de données
+     * @param numeroSalle Le numéro de la salle à supprimer
+     * @param nomBatiment Le nom du batiment de la salle à supprimer
+     * @return un boléan pour savoir si on a supprimé la reservation
+     */
+    public static boolean supprimerReservationsSalle(int idSalle) throws SQLException {
+        String query = "DELETE FROM reservations WHERE id_salle = ?";
+        try (Connection conn = ConnectBd.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setLong(1, idSalle);
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0;
+        }
+    }
+
     /**
      * Création de la table Réservation
      */
