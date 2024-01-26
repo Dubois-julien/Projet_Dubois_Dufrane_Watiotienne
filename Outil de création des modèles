@@ -1,6 +1,9 @@
+Nous avons utilisé l'outil suivant : 
 https://dbconcept.tuxfamily.org/online/index.html
 
-Exmple d'utilisation pour notre base de données : 
+(Il est également possible d'utiliser un logiciel tel que looping)
+
+Exemple d'utilisation pour notre base de données : 
 
 salles: id_salle, numeroSalle, nomBatiment, numeroEtage
 
