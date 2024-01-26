@@ -1,5 +1,12 @@
 # Projet_Dubois_Dufrane_Watiotienne
 
+## Informations Importantes
+
+Pour exécuter l'application, assurez-vous d'ajouter le connecteur MySQL JDBC suivant à votre projet : `mysql-connector-j-8.0.31.jar`.
+Vérifiez également dans le fichier `ConnectBd.java` du package `ConnexionBd` que l'URL, l'identifiant et le mot de passe sont en accord avec ceux définis lors de la configuration de votre utilitaire de base de données (tel que DBeaver). 
+
+Les modèles sont disponibles à la visualisation (`MLD.PNG` et `MCD.PNG`).
+
 ## Fonctionnalités disponibles
 L’université a besoin de créer les emplois du temps de réservation des salles informatiques à l’intérieur du campus.
 
@@ -42,11 +49,6 @@ Le projet contient :
   • Les sources de votre projet Java
   
   • Une documentation éventuelle
-
-## Informations Importantes
-
-Pour exécuter l'application, assurez-vous d'ajouter le connecteur MySQL JDBC suivant à votre projet : `mysql-connector-j-8.0.31.jar`.
-Vérifiez également dans le fichier `ConnectBd.java` du package `ConnexionBd` que l'URL, l'identifiant et le mot de passe sont en accord avec ceux définis lors de la configuration de votre utilitaire de base de données (tel que DBeaver).
 
 ## Evolutions futures possibles
 
